@@ -7599,7 +7599,7 @@ class WAS_Image_Send_HTTP:
 
 
 # LOAD IMAGE NODE
-class WAS_Load_Image:
+class DFL_Load_Image:
 
     def __init__(self):
         self.input_dir = comfy_paths.input_directory
@@ -7617,11 +7617,11 @@ class WAS_Load_Image:
                 }
             }
 
-    RETURN_TYPES = ("IMAGE", "MASK", TEXT_TYPE)
-    RETURN_NAMES = ("image", "mask", "filename_text")
+    RETURN_TYPES = ("IMAGE", "MASK", TEXT_TYPE, "DFLdata")
+    RETURN_NAMES = ("image", "mask", "filename_text", "DFL_meta_data")
     FUNCTION = "load_image"
 
-    CATEGORY = "DFL Suite/IO"
+    CATEGORY = "DFL Suite"
 
     def load_image(self, image_path, RGBA='false', filename_text_extension="true"):
 
@@ -7635,6 +7635,13 @@ class WAS_Load_Image:
             try:
                 i = Image.open(image_path)
                 i = ImageOps.exif_transpose(i)
+                #-------------------------DFL图片处理------------
+                InputDflImg = DFLJPG.load(image_path)
+                if not InputDflImg or not InputDflImg.has_data():
+                    DFL_dict = None
+                else:
+                    DFL_dict = InputDflImg.get_dict()
+                #-------------------------DFL图片处理------------
             except OSError:
                 cstr(f"The image `{image_path.strip()}` specified doesn't exist!").error.print()
                 i = Image.new(mode='RGB', size=(512, 512), color=(0, 0, 0))
@@ -7661,7 +7668,7 @@ class WAS_Load_Image:
         else:
             filename = os.path.splitext(os.path.basename(image_path))[0]
 
-        return (image, mask, filename)
+        return (image, mask, filename, DFL_dict)
 
     def download_image(self, url):
         try:
@@ -14246,6 +14253,7 @@ class WAS_Integer_Place_Counter:
 NODE_CLASS_MAPPINGS = {
     "\u6279\u91cf\u8f7d\u5165\u0044\u0046\u004c\u4eba\u8138\u56fe\uff08\u4f7f\u7528\u6559\u7a0b\u89c1\u0064\u0066\u006c\u0064\u0061\u0074\u0061\u002e\u0063\u0063\u6559\u7a0b\u533a\uff09": DFL_Load_Image_Batch,
     "\u4fdd\u5b58\u0044\u0046\u004c\u4eba\u8138\u56fe\uff08\u4f7f\u7528\u6559\u7a0b\u89c1\u0064\u0066\u006c\u0064\u0061\u0074\u0061\u002e\u0063\u0063\u6559\u7a0b\u533a\uff09":DFL_Image_Save,
+    "\u5355\u5f20\u8bfb\u53d6\u0044\u0046\u004c\u4eba\u8138\u56fe\uff08\u4f7f\u7528\u6559\u7a0b\u89c1\u0064\u0066\u006c\u0064\u0061\u0074\u0061\u002e\u0063\u0063\u6559\u7a0b\u533a\uff09": DFL_Load_Image,
 }
 
 #! EXTRA NODES
