@@ -5,4 +5,4 @@
 
 使用时注意保存图片的尺寸需要和原始图片一致，并且格式为jpg，才能正确导入dfl原信息
 
-![使用示意](assets\example.png)
+![使用示意](https://github.com/Arthurzhangsheng/comfyui_DFLimage/blob/main/assets/example.png)
