@@ -1,0 +1,2 @@
+# comfyui_DFLimage
+在comfyui中处理deepfacelab的素材图片处理工具包，保留DFL内嵌的图片meta信息
